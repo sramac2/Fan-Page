@@ -46,13 +46,6 @@ class _LoginPageState extends State<LoginPage> {
 
     BuildContext currentCtx;
     snackBar = SnackBar(content: Text('Test'));
-
-    emailController.addListener(() {
-      emailStreamController.sink.add(emailController.text.trim());
-    });
-    pwdController.addListener(() {
-      pwdStreamController.sink.add(pwdController.text.trim());
-    });
     super.initState();
   }
 
@@ -99,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                     border: Border.all(color: Colors.black),
                   ),
                   child: TextFormField(
+                    controller: pwdController,
                     decoration: InputDecoration(
                       labelText: "Password",
                     ),
@@ -106,15 +100,18 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    snackBar = SnackBar(content: Text("Sample Test"));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    login();
                   },
                   child: Text(
                     "Login",
                     style: TextStyle(color: Colors.white),
                   ),
                   color: Colors.black,
-                )
+                ),
+
+                MaterialButton(onPressed: (){
+                  api.googleSignIn();
+                }, child: Text("Google Sign In"),)
               ],
             )),
           );
@@ -129,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     }
-    String response = await api.LoginUserEmailPass(email, pwd);
+    String response = await api.loginUserEmailPass(email, pwd);
     if (response != null) {
       snackBar = SnackBar(content: Text(response));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

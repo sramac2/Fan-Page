@@ -1,11 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthAPI {
-  FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<String> LoginUserEmailPass(String email, String pwd) async {
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+  // Optional clientId
+  // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
+  scopes: <String>[
+    'email',
+  ],
+);
+
+
+  Future<String> loginUserEmailPass(String email, String pwd) async {
     try {
-      UserCredential userCredential = await auth
+      UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pwd);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -21,7 +30,7 @@ class AuthAPI {
 
   Future<String> registerEmailPass(String email, String pwd) async {
     try {
-      UserCredential userCredential = await auth
+      UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: pwd);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -36,4 +45,22 @@ class AuthAPI {
     }
     return null;
   }
+
+  Future<String> logout() async {
+    await FirebaseAuth.instance.signOut();
+    _googleSignIn.disconnect();
+    return null;
+  }
+
+  Future<String> googleSignIn() async{
+    try{
+      await _googleSignIn.signIn();
+    }
+    catch(error){
+      print(error);
+      return error.toString();
+    }
+  return null;
+  }
+  
 }
