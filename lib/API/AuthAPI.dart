@@ -62,5 +62,9 @@ class AuthAPI {
     }
   return null;
   }
+
+  Future<String> createUser(){
+    
+  }
   
 }
