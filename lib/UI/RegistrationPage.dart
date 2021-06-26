@@ -12,6 +12,9 @@ class RegistrationDemo extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          title: Text('Registration Page'),
+        ),
         body: RegistrationPage(),
       ),
     );
@@ -114,7 +117,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 snackBar = SnackBar(content: Text(res));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               } else {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
               }
             }
           },
@@ -154,6 +158,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     }
+    Navigator.pop(context);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => HomePage()));
   }

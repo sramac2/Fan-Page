@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
       snackBar = SnackBar(content: Text(response));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-
+    Navigator.pop(context);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => HomePage()));
   }

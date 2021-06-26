@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_page/API/MessageAPI.dart';
 import 'package:uuid/uuid.dart';
+import 'package:fan_page/UI/LoginPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -31,6 +32,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 authAPI.logout();
                 Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginDemo()));
               },
             )
           ],
@@ -84,7 +87,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     var cUser = FirebaseAuth.instance.currentUser;
     messages = messageAPI.getAllMessages();
-    user = authAPI.findUserbyId(cUser!=null ? cUser.uid:'4a37afa0-ff31-4390-a3b4-91ae03d70d17' );
+    user = authAPI.findUserbyId(
+        cUser != null ? cUser.uid : '4a37afa0-ff31-4390-a3b4-91ae03d70d17');
     super.initState();
   }
 
