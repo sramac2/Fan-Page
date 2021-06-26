@@ -1,16 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../Models/User.dart' as models;
 
 class AuthAPI {
-
   GoogleSignIn _googleSignIn = GoogleSignIn(
-  // Optional clientId
-  // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
-  scopes: <String>[
-    'email',
-  ],
-);
-
+    // Optional clientId
+    // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
+    scopes: <String>[
+      'email',
+    ],
+  );
 
   Future<String> loginUserEmailPass(String email, String pwd) async {
     try {
@@ -52,19 +52,37 @@ class AuthAPI {
     return null;
   }
 
-  Future<String> googleSignIn() async{
-    try{
+  Future<String> googleSignIn() async {
+    try {
+      
       await _googleSignIn.signIn();
-    }
-    catch(error){
+    } catch (error) {
       print(error);
       return error.toString();
     }
-  return null;
+    return null;
   }
 
-  Future<String> createUser(){
-    
+  Future<String> createUser(models.User user) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    return await users
+        .add(user.toJson())
+        .then((value) => null)
+        .catchError((error) => error.toString());
   }
-  
+
+  Future<models.User> findUserbyId(String uid) async{
+    
+    List<models.User> result = [];
+    var collection = FirebaseFirestore.instance.collection('users');
+    var querySnapshot = await collection.where("uid",isEqualTo: uid).get();
+    for (var doc in querySnapshot.docs) {
+      result.add(
+        models.User.fromJson(
+          doc.data(),
+        ),
+      );
+    }
+    return result.isEmpty ?null: result[0];
+  }
 }

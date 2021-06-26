@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:fan_page/API/AuthAPI.dart';
+import 'package:fan_page/UI/RegistrationPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import 'HomePage.dart';
 
 class LoginDemo extends StatelessWidget {
   const LoginDemo({Key key}) : super(key: key);
@@ -41,6 +44,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     emailController = TextEditingController();
     pwdController = TextEditingController();
+    emailController.text = 'test567@gmail.com';
+    pwdController.text = 'test567';
     emailStreamController = StreamController<String>.broadcast();
     pwdStreamController = StreamController<String>.broadcast();
 
@@ -108,10 +113,28 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   color: Colors.black,
                 ),
-
-                MaterialButton(onPressed: (){
-                  api.googleSignIn();
-                }, child: Text("Google Sign In"),)
+                MaterialButton(
+                  onPressed: () async {
+                    String res = await api.googleSignIn();
+                    if (res != null) {
+                      snackBar = SnackBar(content: Text(res));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    }
+                  },
+                  child: Text("Google Sign In"),
+                ),
+                MaterialButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegistrationDemo()));
+                  },
+                  child: Text("Don't have an account?"),
+                )
               ],
             )),
           );
@@ -132,6 +155,7 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
 
-    //TODO: naviagte to mesages page
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 }

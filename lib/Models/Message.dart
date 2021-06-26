@@ -1,11 +1,11 @@
-class User {
+class Message {
   String datetime;
   String uid;
   String content;
 
-  User({this.datetime, this.uid, this.content});
+  Message({this.datetime, this.uid, this.content});
 
-  User.fromJson(Map<String, dynamic> json) {
+  Message.fromJson(Map<String, dynamic> json) {
     datetime = json['datetime'];
     uid = json['uid'];
     content = json['content'];
